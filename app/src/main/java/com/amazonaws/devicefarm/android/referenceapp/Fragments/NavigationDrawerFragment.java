@@ -35,7 +35,7 @@ import com.amazonaws.devicefarm.android.referenceapp.R;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 
 import static android.content.Context.*;
 
@@ -43,7 +43,7 @@ import static android.content.Context.*;
  * Fragment for the the navigation drawer
  */
 public class NavigationDrawerFragment extends Fragment {
-    @InjectView(R.id.drawerList)
+    @BindView(R.id.drawerList)
     RecyclerView recycleView;
 
     private DrawerAdapter drawerAdapter;
@@ -89,7 +89,7 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        ButterKnife.inject(this, layout);
+        ButterKnife.bind(this, layout);
         return layout;
     }
 }

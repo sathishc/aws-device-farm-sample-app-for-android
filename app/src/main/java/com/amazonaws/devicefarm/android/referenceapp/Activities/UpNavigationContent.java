@@ -28,7 +28,7 @@ import android.widget.TextView;
 import com.amazonaws.devicefarm.android.referenceapp.R;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 
 /**
  * <h1>Up Navigation Content Activity</h1>
@@ -37,23 +37,23 @@ import butterknife.InjectView;
  * </p>
  */
 public class UpNavigationContent extends AppCompatActivity{
-    @InjectView(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @InjectView(R.id.nested_up_button)
+    @BindView(R.id.nested_up_button)
     Button nextButton;
 
-    @InjectView(R.id.toolbar_title)
+    @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
 
-    @InjectView(R.id.up_navigation_content_text)
+    @BindView(R.id.up_navigation_content_text)
     TextView content_text;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.up_navigation);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

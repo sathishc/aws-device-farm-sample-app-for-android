@@ -15,12 +15,14 @@
 
 package com.amazonaws.devicefarm.android.referenceapp.Fragments;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -30,6 +32,7 @@ import android.nfc.NfcManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +45,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 
 /**
  * A fragment to detect the radio statuses within the Android app
@@ -53,17 +56,17 @@ public class FixturesFragment extends Fragment implements
 
     private static final String TAG = "fixtures-fragment";
 
-    @InjectView(R.id.longitude)
+    @BindView(R.id.longitude)
     TextView longitude;
-    @InjectView(R.id.lat)
+    @BindView(R.id.lat)
     TextView lat;
-    @InjectView(R.id.wifi)
+    @BindView(R.id.wifi)
     TextView wifi;
-    @InjectView(R.id.bluetooth)
+    @BindView(R.id.bluetooth)
     TextView bluetooth;
-    @InjectView(R.id.gps)
+    @BindView(R.id.gps)
     TextView gps;
-    @InjectView(R.id.nfc)
+    @BindView(R.id.nfc)
     TextView nfc;
 
     private GoogleApiClient googleApiClient;
@@ -72,7 +75,7 @@ public class FixturesFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fixtures_layout, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         buildGoogleApiClient();
 
         //Registering events to detect radio changes
@@ -135,7 +138,7 @@ public class FixturesFragment extends Fragment implements
      * Updates the Wifi status
      */
     private void updateWifiStatusDisplay() {
-        final WifiManager wifiManager = (WifiManager)getActivity().getSystemService(Context.WIFI_SERVICE);
+        final WifiManager wifiManager = (WifiManager)getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifi.setText(Boolean.toString(wifiManager.isWifiEnabled()));
     }
 
@@ -171,14 +174,24 @@ public class FixturesFragment extends Fragment implements
      */
     @Override
     public void onConnected(Bundle bundle) {
-        final Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        if (location != null) {
-            lat.setText("" + location.getLatitude());
-            longitude.setText("" + location.getLongitude());
-        } else {
-            lat.setText("Not Available");
-            longitude.setText("Not Available");
+        String latText, longText;
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            final Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if (location != null) {
+                latText = "" + location.getLatitude();
+                longText = "" + location.getLongitude();
+            } else {
+                latText = "Not Available";
+                longText = latText;
+            }
         }
+        else {
+            latText = "Not allowed";
+            longText = latText;
+        }
+        lat.setText(latText);
+        longitude.setText(longText);
     }
 
     @Override
