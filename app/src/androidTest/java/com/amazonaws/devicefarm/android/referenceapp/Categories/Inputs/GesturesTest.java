@@ -69,7 +69,7 @@ public class GesturesTest extends InputControlsBase {
     @Test
     public void testSinglePress(){
         clickId(R.id.input_gesture_action_pad);
-        checkIfActionIsDisplayed("Single tap confirmed");
+        checkIfActionIsDisplayed("Single Tap Up");
 
     }
 
